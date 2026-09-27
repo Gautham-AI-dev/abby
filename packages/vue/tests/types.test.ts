@@ -59,7 +59,8 @@ describe("useAbby", () => {
     );
     await nextTick();
 
-    assertType<"ONLY_ONE_VARIANT">(test1Result().variant.value);
+    // undefined covers the SSR/first render before the client resolves a variant
+    assertType<"ONLY_ONE_VARIANT" | undefined>(test1Result().variant.value);
 
     expect(test1Result().variant.value).toBeDefined();
 
@@ -68,7 +69,9 @@ describe("useAbby", () => {
     );
     await nextTick();
 
-    assertType<(typeof test2Variants)[number]>(test2Result().variant.value);
+    assertType<(typeof test2Variants)[number] | undefined>(
+      test2Result().variant.value
+    );
 
     expect(test2Result().variant.value).toBeDefined();
   });

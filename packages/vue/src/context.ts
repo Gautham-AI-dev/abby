@@ -7,6 +7,7 @@ import {
   HttpService,
   type RemoteConfigValueString,
   type RemoteConfigValueStringToType,
+  type StorageServiceOptions,
   type ValidatorType,
 } from "@tryabby/core";
 import type { Infer } from "@tryabby/core/validation";
@@ -219,7 +220,14 @@ export function createAbby<
 
   const useFeatureFlag = (name: FlagName): ComputedRef<boolean> => {
     const data = useAbbyData();
-    return computed(() => data.value.flags[name].value);
+    return computed(() => {
+      // accessing data.value keeps this subscribed to provider updates;
+      // the core fallback covers dev overrides, defaults and fallback values
+      // when the response omits the flag instead of crashing on undefined.
+      const record = data.value.flags[name];
+      if (record !== undefined) return record.value;
+      return abby.getFeatureFlag(name);
+    });
   };
 
   /**

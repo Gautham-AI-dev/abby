@@ -173,9 +173,9 @@ describe("useAbby", () => {
     result().onAct();
     await nextTick();
 
-    // first call is tested above
-    expect(spy).toHaveBeenNthCalledWith(
-      2,
+    // call history is restored between tests, so assert the ACT ping as the
+    // last sendData call of THIS test (mount PING flushes first)
+    expect(spy).toHaveBeenLastCalledWith(
       expect.objectContaining({ type: AbbyEventType.ACT })
     );
   });

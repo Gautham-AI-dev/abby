@@ -1,6 +1,6 @@
 # `@tryabby/vue`
 
-Vue 3 integration for [Abby](https://docs.tryabby.com) — A/B testing, feature flags and remote config.
+Vue 3 integration for [Abby](https://docs.tryabby.com) ï¿½ A/B testing, feature flags and remote config.
 
 Mirrors `@tryabby/react`: the same `createAbby` factory, the same type-level
 quality, and the same runtime behaviour (including rendering an empty variant
@@ -72,15 +72,26 @@ const welcomeMessage = useRemoteConfig("welcomeMessage");
 </script>
 
 <template>
-  <footer v-if="variant === '"'"'new'"'"'" @click="onAct">new footer: {{ welcomeMessage }}</footer>
+  <footer v-if="variant === 'new'" @click="onAct">new footer: {{ welcomeMessage }}</footer>
   <footer v-else @click="onAct">old footer</footer>
   <CheckoutV2 v-if="newCheckout" />
 </template>
 ```
 
-Plain (non-reactive) getters — `getABTestValue`, `getFeatureFlagValue`,
-`getRemoteConfig`, `getVariants`, `getABResetFunction` — work anywhere,
+Plain (non-reactive) getters ï¿½ `getABTestValue`, `getFeatureFlagValue`,
+`getRemoteConfig`, `getVariants`, `getABResetFunction` ï¿½ work anywhere,
 including outside components.
+
+## SSR / Nuxt notes
+
+- `variant` is `undefined` on the very first render (the server never runs
+  `onMounted`, so no variant is selected yet). Guard with `v-if="variant"`.
+- One `createAbby()` result holds mutable project data on its core instance.
+  On servers handling concurrent requests (Nuxt SSR), call `createAbby()`
+  per request (e.g. inside a request-scoped plugin) instead of sharing one
+  module-level instance, so request A passing `initialData` can never leak
+  into request B that omits it. SPA / client-only usage can share one
+  module-level instance (same as `@tryabby/react`).
 
 ## API parity with `@tryabby/react`
 
@@ -89,7 +100,10 @@ including outside components.
 | `AbbyProvider` (`initialData` prop) | `AbbyProvider` (`initialData` prop) |
 | `useAbby(name, lookup?)` ? `{ variant, onAct }` | `useAbby(name, lookup?)` ? `{ variant: ComputedRef, onAct }` |
 | `useFeatureFlag(name)` | `useFeatureFlag(name)` ? `ComputedRef<boolean>` |
-| `useFeatureFlags()` | `useFeatureFlags()` ? `ComputedRef<Array<…>>` |
-| `useRemoteConfig(name)` | `useRemoteConfig(name)` ? `ComputedRef<…>` |
-| `useRemoteConfigVariables()` | `useRemoteConfigVariables()` ? `ComputedRef<Array<…>>` |
+| `useFeatureFlags()` | `useFeatureFlags()` ? `ComputedRef<Array<ï¿½>>` |
+| `useRemoteConfig(name)` | `useRemoteConfig(name)` ? `ComputedRef<ï¿½>` |
+| `useRemoteConfigVariables()` | `useRemoteConfigVariables()` ? `ComputedRef<Array<ï¿½>>` |
+| `withDevtools(factory, props)` ? hook | `withDevtools(factory, props)` ? component |
+Config(name)` | `useRemoteConfig(name)` ? `ComputedRef<ï¿½>` |
+| `useRemoteConfigVariables()` | `useRemoteConfigVariables()` ? `ComputedRef<Array<ï¿½>>` |
 | `withDevtools(factory, props)` ? hook | `withDevtools(factory, props)` ? component |
