@@ -13,13 +13,16 @@
       "@vue/runtime-dom": "/node_modules/.pnpm/@vue+runtime-dom@3.5.43/node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js",
       "@vue/runtime-core": "/node_modules/.pnpm/@vue+runtime-dom@3.5.43/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js",
       "@vue/shared": "/node_modules/.pnpm/@vue+runtime-dom@3.5.43/node_modules/@vue/shared/dist/shared.esm-bundler.js",
-      "@vue/reactivity": "/node_modules/.pnpm/@vue+runtime-dom@3.5.43/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js"
+      "@vue/reactivity": "/node_modules/.pnpm/@vue+runtime-dom@3.5.43/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js",
+      "@vue/compiler-dom": "/node_modules/.pnpm/@vue+compiler-dom@3.5.43/node_modules/@vue/compiler-dom/dist/compiler-dom.esm-bundler.js",
+      "@vue/compiler-core": "/node_modules/.pnpm/@vue+compiler-core@3.5.43/node_modules/@vue/compiler-core/dist/compiler-core.esm-bundler.js"
     }}
   </script>
 </head>
 <body>
   <h1>@tryabby/vue demo</h1>
   <div id="app">loading…</div>
+  <script>window.process = window.process || { env: { NODE_ENV: 'development' } };</script>
   <script type="module">
     import { createApp, h } from 'vue';
     import { createAbby } from '@tryabby/vue';
