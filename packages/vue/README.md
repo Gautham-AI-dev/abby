@@ -1,6 +1,6 @@
 # `@tryabby/vue`
 
-Vue 3 integration for [Abby](https://docs.tryabby.com) � A/B testing, feature flags and remote config.
+Vue 3 integration for [Abby](https://docs.tryabby.com) - A/B testing, feature flags and remote config.
 
 Mirrors `@tryabby/react`: the same `createAbby` factory, the same type-level
 quality, and the same runtime behaviour (including rendering an empty variant
@@ -78,14 +78,16 @@ const welcomeMessage = useRemoteConfig("welcomeMessage");
 </template>
 ```
 
-Plain (non-reactive) getters � `getABTestValue`, `getFeatureFlagValue`,
-`getRemoteConfig`, `getVariants`, `getABResetFunction` � work anywhere,
+Plain (non-reactive) getters - `getABTestValue`, `getFeatureFlagValue`,
+`getRemoteConfig`, `getVariants`, `getABResetFunction` - work anywhere,
 including outside components.
 
 ## SSR / Nuxt notes
 
-- `variant` is `undefined` on the very first render (the server never runs
-  `onMounted`, so no variant is selected yet). Guard with `v-if="variant"`.
+- `variant` starts as `""` on the very first render (the server never runs
+  `onMounted`, so no variant is selected yet). Without a lookup object that
+  empty string is the value; with a lookup object lacking a `""` key the
+  value is `undefined` until the client resolves. Guard with `v-if="variant"`.
 - One `createAbby()` result holds mutable project data on its core instance.
   On servers handling concurrent requests (Nuxt SSR), call `createAbby()`
   per request (e.g. inside a request-scoped plugin) instead of sharing one
@@ -100,10 +102,7 @@ including outside components.
 | `AbbyProvider` (`initialData` prop) | `AbbyProvider` (`initialData` prop) |
 | `useAbby(name, lookup?)` ? `{ variant, onAct }` | `useAbby(name, lookup?)` ? `{ variant: ComputedRef, onAct }` |
 | `useFeatureFlag(name)` | `useFeatureFlag(name)` ? `ComputedRef<boolean>` |
-| `useFeatureFlags()` | `useFeatureFlags()` ? `ComputedRef<Array<�>>` |
-| `useRemoteConfig(name)` | `useRemoteConfig(name)` ? `ComputedRef<�>` |
-| `useRemoteConfigVariables()` | `useRemoteConfigVariables()` ? `ComputedRef<Array<�>>` |
-| `withDevtools(factory, props)` ? hook | `withDevtools(factory, props)` ? component |
-Config(name)` | `useRemoteConfig(name)` ? `ComputedRef<�>` |
-| `useRemoteConfigVariables()` | `useRemoteConfigVariables()` ? `ComputedRef<Array<�>>` |
+| `useFeatureFlags()` | `useFeatureFlags()` ? `ComputedRef<Array<...>>` |
+| `useRemoteConfig(name)` | `useRemoteConfig(name)` ? `ComputedRef<...>` |
+| `useRemoteConfigVariables()` | `useRemoteConfigVariables()` ? `ComputedRef<Array<...>>` |
 | `withDevtools(factory, props)` ? hook | `withDevtools(factory, props)` ? component |
